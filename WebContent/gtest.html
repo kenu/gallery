@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Gallery</title>
+<style type="text/css">
+img {
+    width: 400px;
+    height: 300px;
+}
+</style>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
+	rel="stylesheet" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="./fotorama.css">
+<script type="text/javascript" src="./fotorama.js"></script>
+
+<script type="text/javascript">
+function search() {
+	// 서버 호출
+	$.ajax({
+		url : "http://apis.daum.net/search/image",
+	    dataType : "jsonp",
+	    type : "post",
+	    jsonp : "callback",
+	    data : {
+	    	    apikey : "5c02597a6a2a1669a0f7d4124874daad294b8bc8",
+	    	    q : $("#q").val(),
+	    	    output : "json",
+	    	    result : "20",
+	    	    pageno : "1"
+	    },
+	    success : function(r){
+			// 결과 파싱
+			var list = r.channel.item;
+			var imgs = "";
+			for (var i = 0; i < list.length; i++) {
+	            imgs += "<a href=\""+ list[i].image +"\"><img src=\""+ list[i].thumbnail +"\"></a>";
+			}
+
+			// 결과 표시
+			imgs = "<div>" + imgs + "</div>";
+			var html = "<h1>결과</h1>" + imgs;
+			$("#result").html(html);
+			
+			$("#result div").fotorama({width:400,height:300});
+	    }
+	});
+}
+
+$(function() {
+	$("#q").val("멍지효");
+	$("#btn").click(search);
+});
+</script>
+</head>
+<body>
+
+<form>
+		<input id="q">
+		<input id="pageNo">
+		<input id="btn" type="button" value="찾기">
+		<div id="result">
+		
+		</div>
+	</form></body>
+</html>
