@@ -3,29 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <script type="text/javascript"
-	src="http://code.jquery.com/jquery-latest.js"></script>
+	src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="fotorama.js"></script>
 <script type="text/javascript">
-	var jq;
-	
-	var getData = function() {
-		jq = $.ajax({
-			url : "image.js",
-			data : {
-				apikey : "opop",
-				q : "snsd"
-			},
-			success : function(r) {
-				console.log(r)
-			}
-		})
-	}
-	var rss;
-	var parsing = function() {
-		rss = JSON.parse(jq.responseText);
-	}
-	
-	var draw = function() {
+    var getData = function() {
+    	$.ajax({
+    		url : "http://127.0.0.1:8080/gallery/image.jsp",
+    		dataType: "jsonp",
+    		data : {
+    			t: new Date().getTime()
+    		},
+    		success : draw
+    	});
+    };
+	var draw = function(rss) {
 		var string = "<ul>";
 		string += "<li>image</li>";
 		var items = rss.channel.item;
@@ -36,10 +27,11 @@
 		string += "</ul>";
 		
 		$("#result").html(string);
-	}
-	var callback = function() {
-		console.log("아싸");
-	}
+	};
+
+	$(function(){
+		getData();
+	});
 </script>
 <title>Ajax</title>
 </head>
